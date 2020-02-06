@@ -10,11 +10,13 @@
  */
 package Lab1;
 public class EncryptDecrypt {
+    
     public static int INITIALMESSAGELENGTH = 64;
     public static int ROUNDKEYLENGTH = 48;
     public static int NUMBEROFROUNDS = 16;
     public static int BPERGROUP = 6;
     public static int BGROUPS = 8;
+    
     private static String message = 
             "00000001"
             + "00100011"
@@ -81,7 +83,7 @@ public class EncryptDecrypt {
         {2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11}
     };
 
-    private static int[][][] s = {s0, s1, s2, s3, s4, s5, s6, s7};
+    private static int[][][] sboxes = {s0, s1, s2, s3, s4, s5, s6, s7};
 
     private static int[] E
             = {
@@ -119,7 +121,7 @@ public class EncryptDecrypt {
                 63, 55, 47, 39, 31, 23, 15, 7
             };
 
-    private static int[] IPi
+    private static int[] IPinv
             = {
                 40, 8, 48, 16, 56, 24, 64, 32,
                 39, 7, 47, 15, 55, 23, 63, 31,
@@ -132,7 +134,7 @@ public class EncryptDecrypt {
             };
     
     // takes 64 bit msg, puts it through IP table, outputs 64 bit
-    public static String plainTextToIP(String msg){
+    public static String permutationIP(String msg){
         String[] initialMsg = msg.split("");
         String[] IPMsgArr = new String[INITIALMESSAGELENGTH];
         for (int i = 0 ; i < INITIALMESSAGELENGTH ; i++){
@@ -168,10 +170,9 @@ public class EncryptDecrypt {
         String rHalf = Halves[1];
         
         String preCypherText = rHalf + lHalf;
+//        System.out.println("cypher text before IPi: " + preCypherText);
         
-        String CypherText = preCypherToIPi(preCypherText);
-        
-        return CypherText;
+        return preCypherText;
                 
         
         
@@ -182,6 +183,7 @@ public class EncryptDecrypt {
     public static String roundFunction(String lHalf, String rHalf, String roundKey){
         String lHalfNew = rHalf;
         String rHalfNew = rightHalfFunction(lHalf, rHalf, roundKey);
+//        System.out.println("new Right Half: " + rHalfNew);
         
         return lHalfNew + rHalfNew;
     }
@@ -218,20 +220,8 @@ public class EncryptDecrypt {
             int srowval = Integer.parseInt(srow, 2);
             int scolval = Integer.parseInt(scol, 2);
             
-            int[][] sbox;
-            switch(bitgroup){
-                case 0: sbox = s0; break;
-                case 1: sbox = s1; break;
-                case 2: sbox = s2; break;
-                case 3: sbox = s3; break;
-                case 4: sbox = s4; break;
-                case 5: sbox = s5; break;
-                case 6: sbox = s6; break;
-                case 7: sbox = s7; break;
-                default: sbox = s0; break;
-            
-            }
-                   
+            int[][] sbox = sboxes[bitgroup];
+     
             String sval = sboxParser(sbox,srowval,scolval);
             fSB = fSB + sval; // gets the 4 bit val from the sbox
             
@@ -263,7 +253,7 @@ public class EncryptDecrypt {
         StringBuffer xor = new StringBuffer();
 
       for (int i = 0; i < str1.length(); i++) {
-         xor.append(str1.charAt(i)^str2.charAt(i));
+         xor.append(str1.charAt(i) ^ str2.charAt(i));
       }
       return xor.toString();
     }
@@ -292,11 +282,11 @@ public class EncryptDecrypt {
         return permutedSB;
     }
     
-    public static String preCypherToIPi(String preCT){
+    public static String permutationIPinv(String preCT){
         String[] initialCT = preCT.split("");
         String[] cypherTextArr = new String[INITIALMESSAGELENGTH];
         for (int i = 0 ; i < INITIALMESSAGELENGTH ; i++){
-            cypherTextArr[i] = initialCT[IPi[i] - 1];
+            cypherTextArr[i] = initialCT[IPinv[i] - 1];
 //            
         }
         String  cypherText = String.join("", cypherTextArr);
@@ -305,36 +295,47 @@ public class EncryptDecrypt {
     }
     
     public static String Encrypt(String initialMessage, String[] RoundKeyArray){
-        String IPMessage = plainTextToIP(initialMessage);
+        
+        String IPMessage = permutationIP(initialMessage);
         String preCypherText = multiRoundFunction(IPMessage, RoundKeyArray);
-        String cypherText = preCypherToIPi(preCypherText);
-        return cypherText;
+        String CypherText = permutationIPinv(preCypherText);
+//        System.out.println("cypher text1: " + CypherText);
+
+        return CypherText;
     }
     
     public static String Decrypt(String cypherText, String[] REVRoundKeyArray){
-        String IPMessage = plainTextToIP(cypherText);
+        
+        String IPMessage = permutationIP(cypherText);
         String prePlainText = multiRoundFunction(IPMessage, REVRoundKeyArray);
-        String plainText = preCypherToIPi(prePlainText);
-        return plainText;
+        String PlainText = permutationIPinv(prePlainText);
+//        System.out.println("Plaintext: " + PlainText);
+        
+        return PlainText;
     }
     
     public static void main(String[] args){
+      
+        System.out.println("Initial message: " + message);
         
-        System.out.println(message);
         String[] RoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+        
+//        System.out.println("round key 1: " + RoundKeyArray[0]);
+//        System.out.println("round key 16: " + RoundKeyArray[15]);
+                
         String ct = Encrypt(message, RoundKeyArray);
+        System.out.println("CypherText: " + ct);
         
-        System.out.println(ct);
         String[] ReversedRoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
-        ReversedRoundKeyArray = KeyGenerator.roundKeyArrayReversal(RoundKeyArray);
-        String pt = Decrypt(ct, ReversedRoundKeyArray);
         
-        System.out.println(pt);
+        ReversedRoundKeyArray = KeyGenerator.roundKeyArrayReversal(ReversedRoundKeyArray);
+        
+//        System.out.println("reversed round key 1: " + RoundKeyArray[15]);
+//        System.out.println("reversed round key 16: " + RoundKeyArray[0]);
+        
+        String pt = Decrypt(ct, ReversedRoundKeyArray);
+        System.out.println("CypherText decrypted: " + pt);
         
     }
-
-    
-    
-    
-    
+ 
 }

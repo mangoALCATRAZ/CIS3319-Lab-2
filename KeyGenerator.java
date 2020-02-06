@@ -18,6 +18,7 @@ public class KeyGenerator {
     public static int PERMUTEDKEYLENGTH2 = 48;
     public static int NUMBEROFROUNDS = 16;
     
+    
     public static String key =
             "00010011"
             + "00110100"
@@ -66,9 +67,10 @@ public class KeyGenerator {
         String[] permutedKey1arr = new String[PERMUTEDKEYLENGTH1];
         for (int i = 0 ; i < PERMUTEDKEYLENGTH1 ; i++){
             permutedKey1arr[i] = initialKey[PC1[i] - 1];
-//            System.out.println(permutedKey1arr[i]);
+
         }
         String permutedKey1 = String.join("", permutedKey1arr);
+//        System.out.println("permuted key 1: " + permutedKey1);        
 
         return permutedKey1;
         
@@ -117,7 +119,7 @@ public class KeyGenerator {
             String rHalf = keyHalves[1];
             
             String shiftedLHalf = leftShift(lHalf,round);
-            String shiftedRHalf = leftShift(lHalf,round);
+            String shiftedRHalf = leftShift(rHalf,round);
 //            System.out.println(shiftedRHalf.length());
             
             permutationKey = shiftedLHalf + shiftedRHalf;
@@ -139,15 +141,5 @@ public class KeyGenerator {
         return ReversedRoundKeyArray;
     }
 
-    
-    
-//    public static void main(String[] args){
-//        
-//        String[] RoundKeyArray = keyGenerator(key);
-//        System.out.println(RoundKeyArray[0]);
-//        
-//        
-//
-//       
-//    }
+ 
 }
