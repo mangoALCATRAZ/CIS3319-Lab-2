@@ -1,3 +1,5 @@
+package Lab1;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -8,6 +10,7 @@
  *
  * @author Tilley
  */
+
 import java.util.Arrays; 
 public class KeyGenerator {
     public static int INITIALKEYLENGTH = 64;
@@ -125,6 +128,18 @@ public class KeyGenerator {
         }
         return RoundKeyArray;
     }
+    
+    public static String[] roundKeyArrayReversal(String[] RoundKeyArray){
+        String[] ReversedRoundKeyArray = RoundKeyArray;
+        for(int i = 0; i < ReversedRoundKeyArray.length / 2; i++){
+            String temp = ReversedRoundKeyArray[i];
+            ReversedRoundKeyArray[i] = ReversedRoundKeyArray[ReversedRoundKeyArray.length -i -1];
+            ReversedRoundKeyArray[ReversedRoundKeyArray.length -i -1] = temp;
+        }
+        return ReversedRoundKeyArray;
+    }
+
+    
     
 //    public static void main(String[] args){
 //        
