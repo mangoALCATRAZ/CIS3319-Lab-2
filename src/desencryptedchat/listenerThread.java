@@ -34,6 +34,7 @@ public class listenerThread extends Thread{
                 
                 
                 String[] ReversedRoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+                ReversedRoundKeyArray = KeyGenerator.roundKeyArrayReversal(ReversedRoundKeyArray);
                 String pt = EncryptDecrypt.Decrypt(received, ReversedRoundKeyArray);
                 String printOut = ChatHelper.binaryStringToText(pt);
                 
