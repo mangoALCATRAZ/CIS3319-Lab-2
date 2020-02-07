@@ -8,12 +8,13 @@ package desencryptedchat;
 import java.net.*;
 import java.util.*;
 import java.io.*;
-/**
+
+/*
  *
  * @author woah dude
  */
 public class DESencryptedChat {
-
+    public static Scanner scan = new Scanner(System.in);
     /**
      * @param args the command line arguments
      * @throws java.lang.Exception
@@ -22,7 +23,6 @@ public class DESencryptedChat {
         // TODO code application logic here
         
         Socket sock = null;
-        Scanner scan = new Scanner(System.in);
         String input;
         int port = 5000;
         
@@ -45,13 +45,12 @@ public class DESencryptedChat {
                     break;
             }
         }
-        scan.close();
         
         senderThread(sock);
         
         System.out.println("\nClosing chat program...");
         
-        
+        scan.close();
     }
     
     public static Socket hostMethod(int inPort) throws IOException{
@@ -76,12 +75,11 @@ public class DESencryptedChat {
     
     public static Socket joinMethod(int inPort) throws IOException{
         Socket ret = null;
-        Scanner in = new Scanner(System.in);
         String ip;
         
         try{
             System.out.println("\n\nPlease enter ip: ");
-            ip = in.nextLine();
+            ip = scan.nextLine();
             
             ret = new Socket(ip, inPort);
         }
@@ -90,7 +88,6 @@ public class DESencryptedChat {
             throw e;
         }
         
-        in.close();
         return ret;
         
         
@@ -108,7 +105,6 @@ public class DESencryptedChat {
         
         boolean stopFlag = false;
         
-        Scanner scan = new Scanner(System.in);
         PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
         
         System.out.println("\nLocal sender ready.");
