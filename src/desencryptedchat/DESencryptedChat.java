@@ -101,20 +101,20 @@ public class DESencryptedChat {
        
     }
     
-    public static void senderThread(Socket sock) throws IOException{
+    public static void senderThread(Socket sock) throws Exception{
         // fork here
         listenerThread lThread = new listenerThread(sock);
         lThread.start(); // starts listening thread
         
         boolean stopFlag = false;
         
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        Scanner scan = new Scanner(System.in);
         PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
         
         System.out.println("\nLocal sender ready.");
         while(!stopFlag){
             try{
-                String userInput = stdIn.readLine();
+                String userInput = scan.nextLine();
                 if(userInput.toLowerCase().equals("stop")){
                     stopFlag = true;
                     
@@ -130,7 +130,7 @@ public class DESencryptedChat {
             }   
             
                 
-            catch(IOException e){
+            catch(Exception e){
                 System.out.println("\n" + e);
                 lThread.end();
                 sock.close();
