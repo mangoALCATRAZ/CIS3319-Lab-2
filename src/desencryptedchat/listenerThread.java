@@ -13,28 +13,44 @@ import java.io.*;
  */
 public class listenerThread extends Thread{
     private Socket sock;
+    private volatile boolean endFlag;
     
     public listenerThread(Socket inSock){
         sock = inSock;
-    
+        endFlag = false;
     }
     
-    public void run(){
+    @Override
+    public void run() {
         try{
             BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             
             // only accept 5 lines before closing socket and ending thread
-            for(int i = 0; i < 5; i++){
+            while(!endFlag){
                 String received = in.readLine();
-                System.out.println(""); // output goes here.
+                
+                // DECRYPTION GOES HERE, PRINT OUT RESULTING PLAINTEXT INSTEAD OF received
+                System.out.print("\n" + sock.getInetAddress().toString() + ": " + received); // output goes here.
+                
                 
             }
-        }
-        catch(Exception e){
             
-            System.out.print(e);
+            sock.close();
+            System.out.println("Server-aspect done running.");
+            
+        }
+        catch(IOException e){
+            
+            System.out.print("\nListener thread: " + e);
+            
+            
         }
    }
+    
+    // called by other thread
+    public void end(){
+        endFlag = true;
+    }
 }
     
 

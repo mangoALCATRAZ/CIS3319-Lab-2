@@ -7,6 +7,7 @@ package desencryptedchat;
 
 import java.net.*;
 import java.util.*;
+import java.io.*;
 /**
  *
  * @author woah dude
@@ -15,6 +16,7 @@ public class DESencryptedChat {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception{
         // TODO code application logic here
@@ -29,27 +31,33 @@ public class DESencryptedChat {
             System.out.println("\n\nHost of join?\n\n1. Host\n2. Join");
             input = scan.nextLine();
             
-            if(input.equals("1") || input.equals("1.")){
-                sock = hostMethod(port);
-            }
-            else if(input.equals("2") || input.equals("2.")){
-                sock = joinMethod(port);
-            }
-            else{
-                System.out.println("\nInvalid, please try again.");
+            switch (input) {
+                case "1":
+                case "1.":
+                    sock = hostMethod(port);
+                    break;
+                case "2":
+                case "2.":
+                    sock = joinMethod(port);
+                    break;
+                default:
+                    System.out.println("\nInvalid, please try again.");
+                    break;
             }
         }
+        scan.close();
         
+        senderThread(sock);
         
-        
+        System.out.println("\nClosing chat program...");
         
         
     }
     
-    public static Socket hostMethod(int inPort) throws Exception{
-        Socket ret = new Socket();
+    public static Socket hostMethod(int inPort) throws IOException{
+        Socket ret = null;
         
-        // under construction
+     
         
         try{
             ServerSocket serverSocket = new ServerSocket(inPort);
@@ -58,16 +66,16 @@ public class DESencryptedChat {
             
             System.out.println("\n" + ret.getInetAddress().toString() + " connected!");
         }
-        catch(Exception e){
-            System.out.println(e);
+        catch(IOException e){
+            System.out.println("\n" + e);
             throw e;
         
         }
         return ret;
     }
     
-    public static Socket joinMethod(int inPort) throws Exception{
-        Socket ret = new Socket();
+    public static Socket joinMethod(int inPort) throws IOException{
+        Socket ret = null;
         Scanner in = new Scanner(System.in);
         String ip;
         
@@ -77,8 +85,8 @@ public class DESencryptedChat {
             
             ret = new Socket(ip, inPort);
         }
-        catch(Exception e){
-            System.out.println(e);
+        catch(IOException e){
+            System.out.println("\n" + e);
             throw e;
         }
         
@@ -87,9 +95,53 @@ public class DESencryptedChat {
         
         
         
-        // under construction
+       
         
        
+    }
+    
+    public static void senderThread(Socket sock) throws IOException{
+        // fork here
+        listenerThread lThread = new listenerThread(sock);
+        lThread.start(); // starts listening thread
+        
+        boolean stopFlag = false;
+        
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+        PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
+        
+        System.out.println("\nLocal sender ready.");
+        while(!stopFlag){
+            try{
+                String userInput = stdIn.readLine();
+                if(userInput.toLowerCase().equals("stop")){
+                    stopFlag = true;
+                    
+                    
+                }
+                
+                System.out.print("\nMe: " + userInput);
+                
+                // ENCRYPTION GOES HERE. SEND OUT ENCRYPTED CIPHERTEXT INSTEAD
+                // OF userInput
+                
+                out.println(userInput);
+            }   
+            
+                
+            catch(IOException e){
+                System.out.println("\n" + e);
+                lThread.end();
+                sock.close();
+                throw e;
+            }
+        }
+        
+        lThread.end();
+        sock.close();
+        
+        System.out.println("\nSender-aspect done running.");
+        
     }
     
     
