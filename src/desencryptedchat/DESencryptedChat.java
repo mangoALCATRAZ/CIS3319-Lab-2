@@ -117,7 +117,7 @@ public class DESencryptedChat {
                     
                 }
                 
-                System.out.print("\nMe: " + userInput);
+                System.out.print("Me: " + userInput + "\n");
                 
                 // ENCRYPTION GOES HERE. SEND OUT ENCRYPTED CIPHERTEXT INSTEAD
                 // OF userInput

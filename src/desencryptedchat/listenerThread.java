@@ -31,7 +31,7 @@ public class listenerThread extends Thread{
                 String received = in.readLine();
                 
                 // DECRYPTION GOES HERE, PRINT OUT RESULTING PLAINTEXT INSTEAD OF received
-                System.out.print("\n" + sock.getInetAddress().toString() + ": " + received); // output goes here.
+                System.out.print(sock.getInetAddress().toString() + ": " + received + "/n"); // output goes here.
                 
                 
             }
