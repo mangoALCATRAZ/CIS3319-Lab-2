@@ -8,7 +8,7 @@
  *
  * @author Tilley
  */
-package Lab1;
+package desencryptedchat;
 public class EncryptDecrypt {
     
     public static int INITIALMESSAGELENGTH = 64;
@@ -17,15 +17,7 @@ public class EncryptDecrypt {
     public static int BPERGROUP = 6;
     public static int BGROUPS = 8;
     
-    private static String message = 
-            "00000001"
-            + "00100011"
-            + "01000101"
-            + "01100111"
-            + "10001001"
-            + "10101011"
-            + "11001101"
-            + "11101111";
+    private static String message;
     
     private static int[][] s0 = {
         {14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7},
@@ -132,6 +124,22 @@ public class EncryptDecrypt {
                 34, 2, 42, 10, 50, 18, 58, 26,
                 33, 1, 41, 9, 49, 17, 57, 25
             };
+    
+    
+    public EncryptDecrypt(String inMessage){
+        
+        byte[] byteArr = inMessage.getBytes();
+        String out = new String();
+        
+        for(int i = 0; i < byteArr.length; i++){
+            int mrPopo = Integer.parseInt(Byte.toString(byteArr[i]));
+            String append = Integer.toBinaryString(mrPopo);
+            out = out.concat(append);
+        }
+        
+        message = out;
+        
+    }
     
     // takes 64 bit msg, puts it through IP table, outputs 64 bit
     public static String permutationIP(String msg){
@@ -312,6 +320,9 @@ public class EncryptDecrypt {
 //        System.out.println("Plaintext: " + PlainText);
         
         return PlainText;
+    }
+    public static String getInitialMessage(){
+        return message;
     }
     
   /*  public static void main(String[] args){

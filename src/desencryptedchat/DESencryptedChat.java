@@ -122,7 +122,12 @@ public class DESencryptedChat {
                 // ENCRYPTION GOES HERE. SEND OUT ENCRYPTED CIPHERTEXT INSTEAD
                 // OF userInput
                 
-                out.println(userInput);
+                EncryptDecrypt ed = new EncryptDecrypt(userInput);
+                String[] RoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+                
+                String ct = ed.Encrypt(ed.getInitialMessage(), RoundKeyArray);
+                System.out.println("\tCypherText: " + ct);
+                out.println(ct);
             }   
             
                 

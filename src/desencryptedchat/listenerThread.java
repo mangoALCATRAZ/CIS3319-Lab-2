@@ -28,16 +28,23 @@ public class listenerThread extends Thread{
             System.out.println("\nListener Thread Ready.");
             
             while(!endFlag){
-                String received = in.readLine();
+                String received = in.readLine(); //incoming ciphertext
                 
                 // DECRYPTION GOES HERE, PRINT OUT RESULTING PLAINTEXT INSTEAD OF received
-                System.out.println(sock.getInetAddress().toString() + ": " + received); // output goes here.
+                
+                EncryptDecrypt ed = new EncryptDecrypt(received);
+                String[] ReversedRoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+                String pt = ed.Decrypt(received, ReversedRoundKeyArray);
+                
+                
+                System.out.println(sock.getInetAddress().toString() + ": " + pt); // output goes here.
                 
                 
             }
             
             sock.close();
             System.out.println("Server-aspect done running.");
+
             
         }
         catch(IOException e){
