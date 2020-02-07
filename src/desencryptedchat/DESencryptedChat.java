@@ -28,7 +28,7 @@ public class DESencryptedChat {
         
         
         while(sock == null){ // host or join menu. stuck here until a valid socket is produced.
-            System.out.println("\n\nHost of join?\n\n1. Host\n2. Join");
+            System.out.println("\n\nHost or join?\n\n1. Host\n2. Join");
             input = scan.nextLine();
             
             switch (input) {
@@ -122,11 +122,19 @@ public class DESencryptedChat {
                 // ENCRYPTION GOES HERE. SEND OUT ENCRYPTED CIPHERTEXT INSTEAD
                 // OF userInput
                 
-                EncryptDecrypt ed = new EncryptDecrypt(userInput);
-                String[] RoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+                // insert while loop for longer than 64 bits here
                 
+                EncryptDecrypt ed = new EncryptDecrypt(userInput);
+                
+                String[] RoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+                                
                 String ct = ed.Encrypt(ed.getInitialMessage(), RoundKeyArray);
-                System.out.println("\tCypherText: " + ct);
+                
+                System.out.println("\tCypherText in binary: " + ct);
+                System.out.println("\tCypherText translated from binary: " + ChatHelper.binaryStringToText(ct));
+                
+                // end while loop
+                
                 out.println(ct);
             }   
             

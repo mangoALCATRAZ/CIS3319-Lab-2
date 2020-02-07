@@ -1,4 +1,4 @@
-package Lab1;
+package desencryptedchat;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

@@ -1,4 +1,4 @@
-package Lab1;
+package desencryptedchat;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -58,6 +58,10 @@ public class KeyGenerator {
          44, 49, 39, 56, 34, 53,
          46, 42, 50, 36, 29, 32
 	};
+    
+    public KeyGenerator(String privateKey){
+        key = ChatHelper.textToBinaryString(privateKey);
+    }
     
     // performs PC1 permutation on intial 64 bit key
     // outputs 56 bit permutation key for use with lshifts

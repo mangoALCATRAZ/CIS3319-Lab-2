@@ -125,7 +125,7 @@ public class EncryptDecrypt {
                 33, 1, 41, 9, 49, 17, 57, 25
             };
     
-    
+    // sets up message
     public EncryptDecrypt(String inMessage){
         
         message = ChatHelper.textToBinaryString(inMessage);
@@ -293,21 +293,33 @@ public class EncryptDecrypt {
     }
     
     public static String Encrypt(String initialMessage, String[] RoundKeyArray){
+        // split initial message into 64 bit chunks
+//        System.out.println("initial message length: " + initialMessage.length());
         
-        String IPMessage = permutationIP(initialMessage);
-        String preCypherText = multiRoundFunction(IPMessage, RoundKeyArray);
-        String CypherText = permutationIPinv(preCypherText);
-//        System.out.println("cypher text1: " + CypherText);
+        String[] messageArray = ChatHelper.textSplitter(initialMessage);
+        String CypherText = "";
+        
+        for (int i = 0; i < messageArray.length; i++){
+            String IPMessage = permutationIP(messageArray[i]);
+            String preCypherTextPiece = multiRoundFunction(IPMessage, RoundKeyArray);
+            String CypherTextPiece = permutationIPinv(preCypherTextPiece);
+            CypherText += CypherTextPiece;
+        }
 
         return CypherText;
     }
     
     public static String Decrypt(String cypherText, String[] REVRoundKeyArray){
         
-        String IPMessage = permutationIP(cypherText);
-        String prePlainText = multiRoundFunction(IPMessage, REVRoundKeyArray);
-        String PlainText = permutationIPinv(prePlainText);
-//        System.out.println("Plaintext: " + PlainText);
+        String[] messageArray = ChatHelper.textSplitter(cypherText);
+        String PlainText = "";
+        
+        for (int i = 0; i < messageArray.length; i++){
+            String IPMessage = permutationIP(messageArray[i]);
+            String prePlainTextPiece = multiRoundFunction(IPMessage, REVRoundKeyArray);
+            String PlainTextPiece = permutationIPinv(prePlainTextPiece);
+            PlainText += PlainTextPiece;
+        }
         
         return PlainText;
     }

@@ -29,11 +29,13 @@ public class listenerThread extends Thread{
             
             while(!endFlag){
                 String received = in.readLine(); //incoming ciphertext
+//                System.out.println("received cyphertext: " + received);
                 
                 // DECRYPTION GOES HERE, PRINT OUT RESULTING PLAINTEXT INSTEAD OF received
                 
-                
+                // we might need to allow input of a normal key below
                 String[] ReversedRoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+                
                 ReversedRoundKeyArray = KeyGenerator.roundKeyArrayReversal(ReversedRoundKeyArray);
                 String pt = EncryptDecrypt.Decrypt(received, ReversedRoundKeyArray);
                 String printOut = ChatHelper.binaryStringToText(pt);
