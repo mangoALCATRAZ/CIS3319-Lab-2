@@ -32,12 +32,13 @@ public class listenerThread extends Thread{
                 
                 // DECRYPTION GOES HERE, PRINT OUT RESULTING PLAINTEXT INSTEAD OF received
                 
-                EncryptDecrypt ed = new EncryptDecrypt(received);
+                
                 String[] ReversedRoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
-                String pt = ed.Decrypt(received, ReversedRoundKeyArray);
+                String pt = EncryptDecrypt.Decrypt(received, ReversedRoundKeyArray);
+                String printOut = ChatHelper.binaryStringToText(pt);
                 
                 
-                System.out.println(sock.getInetAddress().toString() + ": " + pt); // output goes here.
+                System.out.println(sock.getInetAddress().toString() + ": " + printOut); // output goes here.
                 
                 
             }

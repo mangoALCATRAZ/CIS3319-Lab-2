@@ -128,17 +128,7 @@ public class EncryptDecrypt {
     
     public EncryptDecrypt(String inMessage){
         
-        byte[] byteArr = inMessage.getBytes();
-        String out = new String();
-        
-        for(int i = 0; i < byteArr.length; i++){
-            int mrPopo = Integer.parseInt(Byte.toString(byteArr[i]));
-            String append = Integer.toBinaryString(mrPopo);
-            out = out.concat(append);
-        }
-        
-        message = out;
-        
+        message = ChatHelper.textToBinaryString(inMessage);
     }
     
     // takes 64 bit msg, puts it through IP table, outputs 64 bit
