@@ -15,11 +15,15 @@ import java.io.*;
  */
 public class DESencryptedChat {
     public static Scanner scan = new Scanner(System.in);
+    private static String privateKey = "";
     /**
      * @param args the command line arguments
      * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception{
+        System.out.println("Enter your key here: ");
+        String semiKey = scan.nextLine();
+        privateKey = ChatHelper.keyConverter(semiKey);
         // TODO code application logic here
         
         Socket sock = null;
@@ -30,6 +34,7 @@ public class DESencryptedChat {
         while(sock == null){ // host or join menu. stuck here until a valid socket is produced.
             System.out.println("\n\nHost or join?\n\n1. Host\n2. Join");
             input = scan.nextLine();
+            
             
             switch (input) {
                 case "1":
@@ -46,7 +51,9 @@ public class DESencryptedChat {
             }
         }
         
+        
         senderThread(sock);
+        
         
         System.out.println("\nClosing chat program...");
         
@@ -104,6 +111,10 @@ public class DESencryptedChat {
         lThread.start(); // starts listening thread
         
         boolean stopFlag = false;
+        // key insertion
+//        System.out.println("Enter your private key. Your partner needs the key.");
+//        key = scan.nextLine();
+//        KeyGenerator.setKey(key);
         
         PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
         
@@ -125,8 +136,20 @@ public class DESencryptedChat {
                 // insert while loop for longer than 64 bits here
                 
                 EncryptDecrypt ed = new EncryptDecrypt(userInput);
+                //
+                String key
+                        = "00010011"
+                        + "00110100"
+                        + "01010111"
+                        + "01111001"
+                        + "10011011"
+                        + "10111100"
+                        + "11011111"
+                        + "11110001";
                 
-                String[] RoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+                KeyGenerator kg = new KeyGenerator(privateKey);
+                
+                String[] RoundKeyArray = kg.keyGenerator(privateKey);
                                 
                 String ct = ed.Encrypt(ed.getInitialMessage(), RoundKeyArray);
                 
@@ -152,6 +175,10 @@ public class DESencryptedChat {
         
         System.out.println("\nSender-aspect done running.");
         
+    }
+    
+    public static String getKey(){
+        return privateKey;
     }
     
     

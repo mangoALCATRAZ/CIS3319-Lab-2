@@ -63,6 +63,13 @@ public class ChatHelper {
         return msgArray;
     }
     
+    public static String keyConverter(String text){
+        String semi = textToBinaryString(text);
+        String k = semi.substring(semi.length() - 64, semi.length());
+        return k;
+        
+    }
+    
    
     
         

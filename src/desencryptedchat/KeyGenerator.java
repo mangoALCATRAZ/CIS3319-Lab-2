@@ -19,15 +19,18 @@ public class KeyGenerator {
     public static int NUMBEROFROUNDS = 16;
     
     
-    public static String key =
-            "00010011"
-            + "00110100"
-            + "01010111"
-            + "01111001"
-            + "10011011"
-            + "10111100"
-            + "11011111"
-            + "11110001";
+//    private static String key =
+//            "00010011"
+//            + "00110100"
+//            + "01010111"
+//            + "01111001"
+//            + "10011011"
+//            + "10111100"
+//            + "11011111"
+//            + "11110001";
+    // 0001001100110100010101110111100110011011101111001101111111110001
+    
+    private static String key = "";
     
     
     private static int[] PC1 = 
@@ -60,7 +63,7 @@ public class KeyGenerator {
 	};
     
     public KeyGenerator(String privateKey){
-        key = ChatHelper.textToBinaryString(privateKey);
+        key = privateKey;
     }
     
     // performs PC1 permutation on intial 64 bit key
@@ -143,6 +146,15 @@ public class KeyGenerator {
             ReversedRoundKeyArray[ReversedRoundKeyArray.length -i -1] = temp;
         }
         return ReversedRoundKeyArray;
+    }
+    
+    
+    public static String getKey(){
+        return key;
+    }
+    
+    public static void setKey(String userKey){
+        key = userKey;
     }
 
  

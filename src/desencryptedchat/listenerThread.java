@@ -14,6 +14,7 @@ import java.io.*;
 public class listenerThread extends Thread{
     private Socket sock;
     private volatile boolean endFlag;
+    private String privateKey = "";
     
     public listenerThread(Socket inSock){
         sock = inSock;
@@ -33,8 +34,26 @@ public class listenerThread extends Thread{
                 
                 // DECRYPTION GOES HERE, PRINT OUT RESULTING PLAINTEXT INSTEAD OF received
                 
+                
                 // we might need to allow input of a normal key below
-                String[] ReversedRoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.key);
+                
+                String key
+                        = "00010011"
+                        + "00110100"
+                        + "01010111"
+                        + "01111001"
+                        + "10011011"
+                        + "10111100"
+                        + "11011111"
+                        + "11110001";
+                
+                privateKey = DESencryptedChat.getKey();
+                KeyGenerator kg = new KeyGenerator(privateKey);
+                
+                
+                String[] ReversedRoundKeyArray = kg.keyGenerator(kg.getKey());
+                
+//                String[] ReversedRoundKeyArray = KeyGenerator.keyGenerator(KeyGenerator.getKey());
                 
                 ReversedRoundKeyArray = KeyGenerator.roundKeyArrayReversal(ReversedRoundKeyArray);
                 String pt = EncryptDecrypt.Decrypt(received, ReversedRoundKeyArray);
