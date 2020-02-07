@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Lab1;
+package desencryptedchat;
 
 /**
  *
@@ -45,10 +45,7 @@ public class ChatHelper {
         return str;
     }
     
-    public static void main(String[] args){
-        String s = textToBinaryString("Hello");
-        binaryStringToText(s);
-    }
+   
     
         
     
