@@ -25,7 +25,8 @@ public class listenerThread extends Thread{
         try{
             BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
             
-            // only accept 5 lines before closing socket and ending thread
+            System.out.println("\nListener Thread Ready.");
+            
             while(!endFlag){
                 String received = in.readLine();
                 

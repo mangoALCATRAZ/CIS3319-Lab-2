@@ -90,6 +90,7 @@ public class DESencryptedChat {
             throw e;
         }
         
+        in.close();
         return ret;
         
         
